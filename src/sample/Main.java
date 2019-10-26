@@ -1,4 +1,4 @@
-
+package sample;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,13 +8,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-
+    FXMLLoader loader;
     AnchorPane anchorPane;
     public void start(Stage primaryStage) throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("."));
-        try
-        {
+        loader = new FXMLLoader(getClass().getResource("chalja.fxml"));
+        try {
             anchorPane=(AnchorPane) loader.load();
         }
         catch (IOException e) {
