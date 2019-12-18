@@ -19,9 +19,8 @@ public class Controller {
     Button captureButton;
     @FXML
     AnchorPane anchorPane;
-
+    VideoPlayerThread vpt;
     Webcam webcam;
-
     public Controller()throws IOException
     {
         webcam=Webcam.getDefault();
@@ -54,10 +53,18 @@ public class Controller {
 
     public void capture()
     {
-        try {
-            ImageIO.write(webcam.getImage(),"JPG",new File("firstCapture.jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(!vpt.isRunning) {
+            vpt.isRunning=true;
+            System.out.println("Video start");
+            Thread thread = new Thread(vpt);
+            thread.start();
+            //        AudioPlayerThread apt = new AudioPlayerThread();
+            //        Thread thread1 = new Thread(apt);
+            //        thread1.start();
+        }
+        else {
+            vpt.isRunning = false;
+            System.out.println("Video Paused");
         }
     }
 }

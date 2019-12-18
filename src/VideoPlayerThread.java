@@ -11,15 +11,18 @@ public class VideoPlayerThread implements Runnable
 {
     ImageView imageView;
     Webcam webcam;
+    boolean isRunning=false;
+
     @Override
+
     public void run()
     {
-        while(true)
+        while(true&&isRunning)
         {
-            Image image = SwingFXUtils.toFXImage(webcam.getImage(), null);
+            Image image =SwingFXUtils.toFXImage(webcam.getImage(),null);//to convert buffered image into javafx image object
             imageView.setImage(image);
             try {
-                sleep(7);
+                sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

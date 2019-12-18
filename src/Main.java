@@ -17,42 +17,13 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
         VideoPlayerThread vpt = new VideoPlayerThread(controller.imagehold,controller.webcam);
-        Thread thread = new Thread(vpt);
-        thread.start();
-        AudioPlayerThread apt = new AudioPlayerThread();
-        Thread thread1 = new Thread(apt);
-        thread1.start();
+        controller.vpt=vpt;
+        // webcampanel that support video feed
+
     }
 
 
     public static void main(String[] args) throws IOException {
         launch(args);
-        /*Webcam webcam=Webcam.getDefault();//if more than one webcam this will default webcam
-//        for(Dimension supportedSize: webcam.getViewSizes()){//get list of available size suppoertwd by computer
-//            System.out.println(supportedSize.toString());
-//        }
-//        webcam.setViewSize(new Dimension(640,480));// to set default size
-        webcam.setViewSize(WebcamResolution.VGA.getSize());// better way to do above task
-        webcam.addWebcamListener(new WebcamListener() {
-            @Override
-            public void webcamOpen(WebcamEvent webcamEvent) {
-                System.out.println("Open Cam");
-            }
-            @Override
-            public void webcamClosed(WebcamEvent webcamEvent) {
-                System.out.println("Close Cam");
-            }
-            @Override
-            public void webcamDisposed(WebcamEvent webcamEvent) {
-                System.out.println("Dispose Cam");
-            }
-            @Override
-            public void webcamImageObtained(WebcamEvent webcamEvent) {
-                System.out.println("Image Taken");
-            }
-        });
-        webcam.open();
-        ImageIO.write(webcam.getImage(),"JPG",new File("firstCapture.jpg"));
-        webcam.close();*/
     }
 }
