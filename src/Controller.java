@@ -1,7 +1,5 @@
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamEvent;
-import com.github.sarxos.webcam.WebcamListener;
-import com.github.sarxos.webcam.WebcamResolution;
+import com.github.sarxos.webcam.*;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -19,13 +17,23 @@ public class Controller {
     Button captureButton;
     @FXML
     AnchorPane anchorPane;
-    VideoPlayerThread vpt;
+    @FXML
+    WebcamPanel webcamPanel;
+    @FXML
     Webcam webcam;
+    //VideoPlayerThread vpt;
+
     public Controller()throws IOException
     {
+        System.out.println("Controller is running");
         webcam=Webcam.getDefault();
+        anchorPane=new AnchorPane();
 //        webcam.setViewSize(new Dimension(320,240));
         webcam.setViewSize(WebcamResolution.VGA.getSize());// better way to do above tas
+        webcamPanel=new WebcamPanel(webcam,false);
+        webcamPanel.setImageSizeDisplayed(true);
+        webcamPanel.setFPSDisplayed(true);
+        webcamPanel.setMirrored(true);
         webcam.addWebcamListener(new WebcamListener() {
             @Override
             public void webcamOpen(WebcamEvent webcamEvent) {
@@ -53,18 +61,6 @@ public class Controller {
 
     public void capture()
     {
-        if(!vpt.isRunning) {
-            vpt.isRunning=true;
-            System.out.println("Video start");
-            Thread thread = new Thread(vpt);
-            thread.start();
-            //        AudioPlayerThread apt = new AudioPlayerThread();
-            //        Thread thread1 = new Thread(apt);
-            //        thread1.start();
-        }
-        else {
-            vpt.isRunning = false;
-            System.out.println("Video Paused");
-        }
+        //webcampaneltry.startvideo();
     }
 }
