@@ -9,11 +9,12 @@
     <children>
         <VBox prefHeight="400.0" prefWidth="462.0">
             <children>
-                <Button fx:id="captureButton" mnemonicParsing="false" onMouseClicked="#capture" prefHeight="51.0" prefWidth="51.0" text="Capture">
+                <Button fx:id="captureButton" mnemonicParsing="false" onMouseClicked="#capture" prefHeight="100.0" prefWidth="100.0" text="Capture">
                <VBox.margin>
                   <Insets top="500.0" />
                </VBox.margin></Button>
-                <Button fx:id="stop" mnemonicParsing="false" onMouseClicked="#stop" prefHeight="51.0" prefWidth="51.0" text="stop" />
+                <Button fx:id="mirror" mnemonicParsing="false" onMouseClicked="#mirror" prefHeight="100.0" prefWidth="100.0" text="Mirror" />
+                <Button fx:id="stop" mnemonicParsing="false" onMouseClicked="#stop" prefHeight="100.0" prefWidth="100.0" text="stop" />
             </children>
         </VBox>
     </children>

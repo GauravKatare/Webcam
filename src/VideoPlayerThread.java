@@ -1,6 +1,8 @@
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamImageTransformer;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.github.sarxos.webcam.util.jh.JHGrayFilter;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;
@@ -19,13 +21,14 @@ import java.io.File;
 import static java.lang.Thread.sleep;
 
 
-public class VideoPlayerThread implements Runnable
+public class VideoPlayerThread implements Runnable,WebcamImageTransformer
 {
     WebcamPanel webcamPanel;
     Webcam webcam;
     static boolean isRunning=false;
-    File saveFile;
-    @Override
+    private File saveFile;
+
+    private static final JHGrayFilter GRAY = new JHGrayFilter();
 
     public void run()
     {
@@ -63,4 +66,8 @@ public class VideoPlayerThread implements Runnable
         this.webcam=webcam;
     }
 
+    @Override
+    public BufferedImage transform(BufferedImage image) {
+        return GRAY.filter(image, null);
+    }
 }

@@ -1,20 +1,7 @@
 import com.github.sarxos.webcam.*;
-import com.xuggle.mediatool.IMediaWriter;
-import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.xuggler.ICodec;
-import com.xuggle.xuggler.IPixelFormat;
-import com.xuggle.xuggler.IVideoPicture;
-import com.xuggle.xuggler.video.ConverterFactory;
-import com.xuggle.xuggler.video.IConverter;
-import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class Controller {
@@ -23,11 +10,14 @@ public class Controller {
     @FXML
     Button stop;
     @FXML
+    Button mirror;
+    @FXML
     AnchorPane anchorpane;
 
     Webcam webcam;
     WebcamPanel webcamPanel;
     private boolean isRunning=false;
+    private boolean ismirror=false;
     VideoPlayerThread vpt;
 
     public Controller()throws IOException
@@ -43,6 +33,9 @@ public class Controller {
             vpt = new VideoPlayerThread(webcamPanel,webcam);
             Thread thread = new Thread(vpt);
             thread.start();
+            AudioPlayerThread apt = new AudioPlayerThread();
+            Thread thread1 = new Thread(apt);
+            thread1.start();
         }
     }
 
@@ -52,4 +45,15 @@ public class Controller {
         System.out.println("Video Stop");
     }
 
+    public void mirror() {
+        if (ismirror == false) {
+            ismirror=true;
+            System.out.println("Image set to mirror");
+            webcamPanel.setMirrored(true);
+        } else {
+            ismirror=false;
+            System.out.println("Image reset ");
+            webcamPanel.setMirrored(false);
+        }
+    }
 }
