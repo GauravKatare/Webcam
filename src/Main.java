@@ -1,44 +1,56 @@
 import com.github.sarxos.webcam.*;
-import com.xuggle.mediatool.IMediaWriter;
-import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.xuggler.ICodec;
-import com.xuggle.xuggler.IPixelFormat;
-import com.xuggle.xuggler.IVideoPicture;
-import com.xuggle.xuggler.video.ConverterFactory;
-import com.xuggle.xuggler.video.IConverter;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application
 {
     static Webcam webcam;
+    static WebcamPanel webcamPanel;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebcamWindow.fxml"));
         Parent pane = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
         controller.webcam=getwebcam();
+        controller.webcamPanel=getWebcamPanel(webcam);
         final SwingNode swingNode = new SwingNode();
-        controller.swingNode=swingNode;
-        primaryStage.setTitle("Hello World");
+        createAndSetSwingContent(swingNode);
+        controller.anchorpane.getChildren().add(swingNode);
+        primaryStage.setTitle("Myskype");
         primaryStage.setScene(new Scene(pane, 800, 800));
         primaryStage.show();
         //webcampanel that support video feed
     }
 
+    public void createAndSetSwingContent(final SwingNode swingNode)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                swingNode.setContent(webcamPanel);
+            }
+        });
+    }
+
     public static void main(String[] args) throws IOException {
         launch(args);
+    }
+
+    private WebcamPanel getWebcamPanel(Webcam webcam)
+    {
+        webcamPanel=new WebcamPanel(webcam);
+        webcamPanel.setFPSDisplayed(true);
+        webcamPanel.setMirrored(false);
+        webcamPanel.setFPSLimit(60);
+        return webcamPanel;
     }
 
     private Webcam getwebcam()
