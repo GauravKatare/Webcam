@@ -1,2 +1,5 @@
-public class Myaudio {
+import java.io.Serializable;
+
+public class Myaudio implements Serializable
+{
 }

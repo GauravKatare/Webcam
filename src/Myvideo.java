@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Myvideo
+public class Myvideo implements Serializable
 {
     public byte[] getFrameData() {
         return frameData;
