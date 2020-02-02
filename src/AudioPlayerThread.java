@@ -1,9 +1,10 @@
 import javax.sound.sampled.*;
 import java.io.ByteArrayOutputStream;
+import java.net.Socket;
 
 public class AudioPlayerThread implements Runnable
 {
-
+    Socket senaudio;
     @Override
     public void run()
     {
@@ -44,5 +45,10 @@ public class AudioPlayerThread implements Runnable
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
+    }
+
+    public void AudioPlayerThread(Socket senaudio)
+    {
+        this.senaudio=senaudio;
     }
 }

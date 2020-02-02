@@ -3,8 +3,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
+import java.net.Socket;
 
-public class Controller {
+public class sendercontroller {
     @FXML
     Button captureButton;
     @FXML
@@ -19,9 +20,8 @@ public class Controller {
     private boolean isRunning=false;
     private boolean ismirror=false;
     VideoPlayerThread vpt;
+    //Socket senaudio,senvideo;
 
-    public Controller()throws IOException
-    { }
 
     public void capture() throws InterruptedException
     {
@@ -31,9 +31,11 @@ public class Controller {
             System.out.println("Video Start");
             VideoPlayerThread.isRunning=true;
             vpt = new VideoPlayerThread(webcamPanel,webcam);
+            //vpt.senvideo=senvideo;
             Thread thread = new Thread(vpt);
             thread.start();
             AudioPlayerThread apt = new AudioPlayerThread();
+            //apt.senaudio=senaudio;
             Thread thread1 = new Thread(apt);
             thread1.start();
         }

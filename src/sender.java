@@ -8,19 +8,27 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 
-public class Main extends Application
+public class sender extends Application
 {
     static Webcam webcam;
     static WebcamPanel webcamPanel;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception
+    {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebcamWindow.fxml"));
         Parent pane = fxmlLoader.load();
-        Controller controller = fxmlLoader.getController();
+        Socket senvideo=new Socket(InetAddress.getLocalHost(),25010);
+        System.out.println("Connectedvideo");
+        //Socket senaudio=new Socket(InetAddress.getLocalHost(),10001);
+        sendercontroller controller = fxmlLoader.getController();
         controller.webcam=getwebcam();
         controller.webcamPanel=getWebcamPanel(webcam);
+        //controller.senaudio=senaudio;
+        //controller.senvideo=senvideo;
         final SwingNode swingNode = new SwingNode();
         createAndSetSwingContent(swingNode);
         controller.anchorpane.getChildren().add(swingNode);
