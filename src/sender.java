@@ -7,7 +7,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -23,12 +26,19 @@ public class sender extends Application
         Parent pane = fxmlLoader.load();
         Socket senvideo=new Socket(InetAddress.getLocalHost(),25010);
         System.out.println("Connectedvideo");
+        OutputStream os = senvideo.getOutputStream();
+        ObjectOutputStream oos=new ObjectOutputStream(os);
+        ByteArrayOutputStream baos=new ByteArrayOutputStream(200000);
         //Socket senaudio=new Socket(InetAddress.getLocalHost(),10001);
+
+
+
         sendercontroller controller = fxmlLoader.getController();
         controller.webcam=getwebcam();
         controller.webcamPanel=getWebcamPanel(webcam);
         //controller.senaudio=senaudio;
-        //controller.senvideo=senvideo;
+        controller.oos=oos;
+        controller.baos=baos;
         final SwingNode swingNode = new SwingNode();
         createAndSetSwingContent(swingNode);
         controller.anchorpane.getChildren().add(swingNode);

@@ -2,7 +2,11 @@ import com.github.sarxos.webcam.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class sendercontroller {
@@ -20,7 +24,9 @@ public class sendercontroller {
     private boolean isRunning=false;
     private boolean ismirror=false;
     VideoPlayerThread vpt;
-    //Socket senaudio,senvideo;
+    ObjectOutputStream oos;
+    ByteArrayOutputStream baos;
+    Socket senaudio,senvideo;
 
 
     public void capture() throws InterruptedException
@@ -31,11 +37,12 @@ public class sendercontroller {
             System.out.println("Video Start");
             VideoPlayerThread.isRunning=true;
             vpt = new VideoPlayerThread(webcamPanel,webcam);
-            //vpt.senvideo=senvideo;
+            vpt.oos=oos;
+            vpt.baos=baos;
             Thread thread = new Thread(vpt);
             thread.start();
             AudioPlayerThread apt = new AudioPlayerThread();
-            //apt.senaudio=senaudio;
+            apt.senaudio=senaudio;
             Thread thread1 = new Thread(apt);
             thread1.start();
         }

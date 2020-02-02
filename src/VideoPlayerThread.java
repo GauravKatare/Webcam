@@ -14,12 +14,9 @@ import com.xuggle.xuggler.video.IConverter;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
-
+import java.sql.Timestamp;
 
 
 public class VideoPlayerThread implements Runnable,WebcamImageTransformer
@@ -28,24 +25,16 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
     Webcam webcam;
     static boolean isRunning=false;
     private File saveFile;
-    Socket senvideo;
+    ObjectOutputStream oos;
+    ByteArrayOutputStream baos;
 
     private static final JHGrayFilter GRAY = new JHGrayFilter();
 
     public void run()
     {
-//        OutputStream os = null;
-//        try {
-//            os=senvideo.getOutputStream();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-//        saveFile=new File("saved.mp4");
-        //Initialize media writer
-        IMediaWriter writer = ToolFactory.makeWriter(saveFile.getName());
-        //Set video recording size
-        Dimension size = WebcamResolution.VGA.getSize();
+        saveFile=new File("saved.mp4");
+        IMediaWriter writer = ToolFactory.makeWriter(saveFile.getName()); //Initialize media write
+        Dimension size = WebcamResolution.VGA.getSize(); //Set video recording size
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, size.width, size.height);
         long start = System.currentTimeMillis();
         int i=0;
@@ -55,21 +44,23 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
             BufferedImage image = ConverterFactory.convertToType(webcamPanel.getImage(), BufferedImage.TYPE_3BYTE_BGR);
             IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
             IVideoPicture frame = converter.toPicture(image, (System.currentTimeMillis() - start) * 1000);
-//            try {
-//                ImageIO.write(image,"jpg",baos);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                os.write(baos.toByteArray());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                os.flush();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                ImageIO.write(webcam.getImage(),"jpg",baos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            byte[] data = baos.toByteArray();
+            Myvideo myvideo=new Myvideo(data,System.currentTimeMillis()-start);
+            try {
+                oos.writeObject(myvideo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                oos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             frame.setKeyFrame(i == 0);
             frame.setQuality(100);
             writer.encodeVideo(0, frame);

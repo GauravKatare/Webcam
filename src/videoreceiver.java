@@ -9,18 +9,13 @@ import java.io.InputStream;
 import java.net.Socket;
 
 
-public class receiverbro
+public class videoreceiver implements Runnable
 {
-    Socket receivervideo;
+    InputStream oin;
 
-    public void doooo()
+    public void run()
     {
-        InputStream oin= null;
-        try {
-            oin = receivervideo.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         while(true)
         {
             byte[] sizeAr = new byte[1000000];
