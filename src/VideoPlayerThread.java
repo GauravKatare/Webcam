@@ -36,15 +36,16 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
         IMediaWriter writer = ToolFactory.makeWriter(saveFile.getName()); //Initialize media write
         Dimension size = WebcamResolution.VGA.getSize(); //Set video recording size
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, size.width, size.height);
-        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+
         long start = System.currentTimeMillis();
         int i=0;
         while(isRunning)
         {
-            System.out.println("Image is Sending");
+            System.out.println(System.currentTimeMillis()-start);
             BufferedImage image = ConverterFactory.convertToType(webcamPanel.getImage(), BufferedImage.TYPE_3BYTE_BGR);
             IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
             IVideoPicture frame = converter.toPicture(image, (System.currentTimeMillis() - start) * 1000);
+            ByteArrayOutputStream baos=new ByteArrayOutputStream();
             try {
                 ImageIO.write(webcam.getImage(),"jpg",baos);
             } catch (IOException e) {
@@ -54,10 +55,6 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
             Myvideo myvideo=new Myvideo(data,System.currentTimeMillis()-start);
             try {
                 oos.writeObject(myvideo);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
                 oos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,7 +63,7 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
             frame.setQuality(100);
             writer.encodeVideo(0, frame);
             try {
-                Thread.sleep(1);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

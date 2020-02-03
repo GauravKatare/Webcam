@@ -8,9 +8,6 @@
 <AnchorPane fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="receivercontroller">
    <children>
        <Button fx:id="showvideo" layoutX="35.0" layoutY="433.0" mnemonicParsing="false" onAction="#showvideo" text="See Video" />
-      <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="216.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../firstCapture.jpg" />
-         </image></ImageView>
+       <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="216.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true" ></ImageView>
    </children>
 </AnchorPane>

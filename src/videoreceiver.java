@@ -14,9 +14,9 @@ public class videoreceiver implements Runnable
     ImageView imageView;
     ByteArrayInputStream bis;
     ObjectInputStream ooin;
-    Image myimage;
+    Image myimage,myimage2;
 
-    public void run()
+    public void run() throws NullPointerException
     {
         while(true)
         {
@@ -31,17 +31,24 @@ public class videoreceiver implements Runnable
             if (obj instanceof Myvideo) {
                 Myvideo myvideo = (Myvideo) obj;
                 byte[] data=myvideo.getFrameData();
-                ByteArrayInputStream bis = new ByteArrayInputStream(data);
+                bis = new ByteArrayInputStream(data);
+                System.out.println(myvideo.getTimestamp());
+                BufferedImage bufferedImage = null;
                 try {
-                    System.out.println("Image is Coming");
-                    //BufferedImage bufferedImage = ImageIO.read(new File("/home/gaurav/Documents/webcam/firstCapture.jpg"));
-                    BufferedImage bufferedImage =  ImageIO.read(bis);
-                    myimage = SwingFXUtils.toFXImage(bufferedImage, null);
+                    bufferedImage = ImageIO.read(bis);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Hello");
+                myimage = SwingFXUtils.toFXImage(bufferedImage, null);
+                try {
                     ImageIO.write(bufferedImage, "jpg", new File("output.jpg") );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //myimage2=SwingFXUtils.toFXImage(bufferedImage1, null);
                 imageView.setImage(myimage);
+                //imageView.setImage(myimage2);
             }
             else if (obj instanceof Myaudio)
             {
