@@ -2,12 +2,7 @@ import com.github.sarxos.webcam.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 
 public class sendercontroller {
     @FXML
@@ -21,36 +16,30 @@ public class sendercontroller {
 
     Webcam webcam;
     WebcamPanel webcamPanel;
-    private boolean isRunning=false;
     private boolean ismirror=false;
     VideoPlayerThread vpt;
-    ObjectOutputStream oos;
-    ByteArrayOutputStream baos;
-    Socket senaudio,senvideo;
+    ObjectOutputStream oos,audiooos;
 
 
     public void capture() throws InterruptedException
     {
-        if(!isRunning)
-        {
-            isRunning=true;
-            System.out.println("Video Start");
-            VideoPlayerThread.isRunning=true;
-            vpt = new VideoPlayerThread(webcamPanel,webcam);
-            vpt.oos=oos;
-            vpt.baos=baos;
-            Thread thread = new Thread(vpt);
-            thread.start();
-            AudioPlayerThread apt = new AudioPlayerThread();
-            apt.senaudio=senaudio;
-            Thread thread1 = new Thread(apt);
-            thread1.start();
-        }
+        System.out.println("Video Start");
+        VideoPlayerThread.setIsRunning(true);
+        vpt = new VideoPlayerThread(webcamPanel,webcam);
+        vpt.setOos(oos);
+        Thread thread = new Thread(vpt);
+        thread.start();
+        AudioPlayerThread apt = new AudioPlayerThread();
+        apt.setOos(audiooos);
+        AudioPlayerThread.setIsRunning(true);
+        Thread thread1 = new Thread(apt);
+        thread1.start();
     }
 
     public void stop()
     {
-        VideoPlayerThread.isRunning=false;
+        VideoPlayerThread.setIsRunning(false);
+        AudioPlayerThread.setIsRunning(false);
         System.out.println("Video Stop");
     }
 

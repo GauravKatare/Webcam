@@ -5,9 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import javax.swing.*;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -24,21 +22,21 @@ public class sender extends Application
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebcamWindow.fxml"));
         Parent pane = fxmlLoader.load();
-        Socket senvideo=new Socket(InetAddress.getLocalHost(),25010);
+        Socket senvideo=new Socket(InetAddress.getLocalHost(),25110);
+        Socket senaudio=new Socket(InetAddress.getLocalHost(),25755);
+
         System.out.println("Connectedvideo");
         OutputStream os = senvideo.getOutputStream();
         ObjectOutputStream oos=new ObjectOutputStream(os);
-        ByteArrayOutputStream baos=new ByteArrayOutputStream(200000);
-        //Socket senaudio=new Socket(InetAddress.getLocalHost(),10001);
-
+        OutputStream audioos = senaudio.getOutputStream();
+        ObjectOutputStream audiooos=new ObjectOutputStream(audioos);
 
 
         sendercontroller controller = fxmlLoader.getController();
         controller.webcam=getwebcam();
         controller.webcamPanel=getWebcamPanel(webcam);
-        //controller.senaudio=senaudio;
         controller.oos=oos;
-        controller.baos=baos;
+        controller.audiooos=audiooos;
         final SwingNode swingNode = new SwingNode();
         createAndSetSwingContent(swingNode);
         controller.anchorpane.getChildren().add(swingNode);

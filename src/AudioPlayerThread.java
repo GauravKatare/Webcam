@@ -1,10 +1,22 @@
 import javax.sound.sampled.*;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class AudioPlayerThread implements Runnable
 {
-    Socket senaudio;
+    private ObjectOutputStream audiooos;
+    private static boolean isRunning;
+
+    public static void setIsRunning(boolean isRunning) {
+        AudioPlayerThread.isRunning = isRunning;
+    }
+
+    public void setOos(ObjectOutputStream audiooos) {
+        this.audiooos = audiooos;
+    }
+
     @Override
     public void run()
     {
@@ -23,21 +35,31 @@ public class AudioPlayerThread implements Runnable
             int CHUNK_SIZE = 1024;
             byte[] data = new byte[microphone.getBufferSize() / 5];
             microphone.start();
-
+            long start = System.currentTimeMillis();
             int bytesRead = 0;
             DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
             speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
             speakers.open(format);
             speakers.start();
             long i=0;// adjust condition of loop for extent of microphone use
-            while (i<10000000000L) {
+            while(isRunning)
+            {
                 i++;
+                System.out.println(System.currentTimeMillis()-start);
                 numBytesRead = microphone.read(data, 0, CHUNK_SIZE);
                 bytesRead += numBytesRead;
                 // write the mic data to a stream for use later
                 out.write(data, 0, numBytesRead);
+                byte[] Audiodata = out.toByteArray();
+                Myaudio myaudio=new Myaudio(Audiodata,System.currentTimeMillis()-start);
+                try {
+                    audiooos.writeObject(myaudio);
+                    audiooos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 // write mic data to stream for immediate playback
-                speakers.write(data, 0, numBytesRead);
+                //speakers.write(data, 0, numBytesRead);
             }
             speakers.drain();
             speakers.close();
@@ -47,8 +69,4 @@ public class AudioPlayerThread implements Runnable
         }
     }
 
-    public void AudioPlayerThread(Socket senaudio)
-    {
-        this.senaudio=senaudio;
-    }
 }

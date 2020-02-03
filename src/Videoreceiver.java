@@ -3,18 +3,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-public class videoreceiver implements Runnable
+public class Videoreceiver implements Runnable
 {
     ImageView imageView;
-    ByteArrayInputStream bis;
     ObjectInputStream ooin;
-    Image myimage,myimage2;
+
 
     public void run() throws NullPointerException
     {
@@ -29,9 +27,10 @@ public class videoreceiver implements Runnable
                 e.printStackTrace();
             }
             if (obj instanceof Myvideo) {
+                Image myimage;
                 Myvideo myvideo = (Myvideo) obj;
                 byte[] data=myvideo.getFrameData();
-                bis = new ByteArrayInputStream(data);
+                ByteArrayInputStream bis = new ByteArrayInputStream(data);
                 System.out.println(myvideo.getTimestamp());
                 BufferedImage bufferedImage = null;
                 try {
@@ -46,16 +45,11 @@ public class videoreceiver implements Runnable
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //myimage2=SwingFXUtils.toFXImage(bufferedImage1, null);
                 imageView.setImage(myimage);
-                //imageView.setImage(myimage2);
             }
-            else if (obj instanceof Myaudio)
+            else
             {
-//                AudioPlayerThread apt = new AudioPlayerThread();
-//                apt.senaudio=senaudio;
-//                Thread thread1 = new Thread(apt);
-//                thread1.start();
+                System.out.println("Error in Video");
             }
         }
     }

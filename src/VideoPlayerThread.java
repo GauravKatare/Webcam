@@ -10,7 +10,6 @@ import com.xuggle.xuggler.IPixelFormat;
 import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,12 +17,20 @@ import java.io.*;
 
 public class VideoPlayerThread implements Runnable,WebcamImageTransformer
 {
-    WebcamPanel webcamPanel;
-    Webcam webcam;
-    static boolean isRunning=false;
+    private  WebcamPanel webcamPanel;
+    private  Webcam webcam;
+    private static boolean isRunning=false;
+    private  ObjectOutputStream oos;
+
+    public static void setIsRunning(boolean isRunning) {
+        VideoPlayerThread.isRunning = isRunning;
+    }
+
+    public void setOos(ObjectOutputStream oos) {
+        this.oos = oos;
+    }
+
     private File saveFile;
-    ObjectOutputStream oos;
-    ByteArrayOutputStream baos;
 
     private static final JHGrayFilter GRAY = new JHGrayFilter();
 
@@ -38,7 +45,7 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
         int i=0;
         while(isRunning)
         {
-            System.out.println(i);
+            System.out.println(System.currentTimeMillis() - start);
             BufferedImage image = ConverterFactory.convertToType(webcamPanel.getImage(), BufferedImage.TYPE_3BYTE_BGR);
             IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
             IVideoPicture frame = converter.toPicture(image, (System.currentTimeMillis() - start) * 1000);
@@ -63,7 +70,7 @@ public class VideoPlayerThread implements Runnable,WebcamImageTransformer
             Myvideo myvideo=new Myvideo(data,System.currentTimeMillis()-start);
 
 
-            
+
             try {
                 oos.writeObject(myvideo);
                 oos.flush();
