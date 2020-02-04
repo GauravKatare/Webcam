@@ -2,10 +2,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
-import java.io.ByteArrayInputStream;
-
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 public class receivercontroller {
@@ -17,19 +13,33 @@ public class receivercontroller {
     @FXML
     ImageView imageView;
 
-    ObjectInputStream ooin,audioooin;
+    public void setOoin(ObjectInputStream ooin) {
+        this.ooin = ooin;
+    }
+
+    public void setAudioooin(ObjectInputStream audioooin) {
+        this.audioooin = audioooin;
+    }
+
+    private ObjectInputStream ooin,audioooin;
+
     public void showvideo()
     {
         System.out.println("Video Start");
+        Bufferplay.videoQueue.clear();
+        Bufferplay.audioQueue.clear();
         Videoreceiver virc=new Videoreceiver();
-        virc.ooin=ooin;
-        virc.imageView=imageView;
-        Thread t=new Thread(virc);
-        t.start();
+        virc.setOoin(ooin);
+        Bufferplay.setImageView(imageView);
+        Thread video=new Thread(virc);
+        video.start();
         Audioreceiver audioreceiver=new Audioreceiver();
-        audioreceiver.audioooin=audioooin;
+        audioreceiver.setAudioooin(audioooin);
         Thread audio=new Thread(audioreceiver);
         audio.start();
+        Bufferplay bufferplay=new Bufferplay();
+        Thread bufferthread=new Thread(bufferplay);
+        bufferthread.start();
     }
 }
 

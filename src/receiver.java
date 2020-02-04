@@ -1,16 +1,18 @@
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
-import java.io.ByteArrayInputStream;
+
+import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class receiver extends Application
 {
@@ -27,7 +29,19 @@ public class receiver extends Application
         Socket receiveraudio=audioserverSocket.accept();
 
         System.out.println("Receiverconnected");
-        ImageView imageView=new ImageView();
+        AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
+        DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
+        SourceDataLine speakers = null;
+        try {
+            speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+            speakers.open(format);
+            speakers.start();
+        }
+        catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        Queue<Myvideo> videoQueue = new LinkedList<>();
+        Queue<Myaudio> audioQueue = new LinkedList<>();
 
         InputStream audiooin=receiveraudio.getInputStream();
         InputStream oin = receivervideo.getInputStream();
@@ -35,8 +49,12 @@ public class receiver extends Application
         ObjectInputStream ooin=new ObjectInputStream(oin);
 
         receivercontroller controller = fxmlLoader.getController();
-        controller.ooin=ooin;
-        controller.audioooin= audioooin;
+        controller.setOoin(ooin);
+        controller.setAudioooin(audioooin);
+        Bufferplay.setSpeakers(speakers);
+        Bufferplay.videoQueue=videoQueue;
+        Bufferplay.audioQueue=audioQueue;
+
         primaryStage.setTitle("Myskype");
         primaryStage.setScene(new Scene(pane, 800, 800));
         primaryStage.show();

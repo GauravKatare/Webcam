@@ -14,32 +14,52 @@ public class sendercontroller {
     @FXML
     AnchorPane anchorpane;
 
-    Webcam webcam;
-    WebcamPanel webcamPanel;
+    private Webcam webcam;
+
+    public void setWebcam(Webcam webcam) {
+        this.webcam = webcam;
+    }
+
+    public void setWebcamPanel(WebcamPanel webcamPanel) {
+        this.webcamPanel = webcamPanel;
+    }
+
+    public void setIsmirror(boolean ismirror) {
+        this.ismirror = ismirror;
+    }
+
+    public void setOos(ObjectOutputStream oos) {
+        this.oos = oos;
+    }
+
+    public void setAudiooos(ObjectOutputStream audiooos) {
+        this.audiooos = audiooos;
+    }
+
+    private  WebcamPanel webcamPanel;
     private boolean ismirror=false;
-    VideoPlayerThread vpt;
-    ObjectOutputStream oos,audiooos;
+    private ObjectOutputStream oos,audiooos;
 
 
     public void capture() throws InterruptedException
     {
         System.out.println("Video Start");
-        VideoPlayerThread.setIsRunning(true);
-        vpt = new VideoPlayerThread(webcamPanel,webcam);
+        Videosender.setIsRunning(true);
+        Videosender vpt = new Videosender(webcamPanel,webcam);
         vpt.setOos(oos);
         Thread thread = new Thread(vpt);
         thread.start();
-        AudioPlayerThread apt = new AudioPlayerThread();
+        Audiosender apt = new Audiosender();
         apt.setOos(audiooos);
-        AudioPlayerThread.setIsRunning(true);
+        Audiosender.setIsRunning(true);
         Thread thread1 = new Thread(apt);
         thread1.start();
     }
 
     public void stop()
     {
-        VideoPlayerThread.setIsRunning(false);
-        AudioPlayerThread.setIsRunning(false);
+        Videosender.setIsRunning(false);
+        Audiosender.setIsRunning(false);
         System.out.println("Video Stop");
     }
 
@@ -54,4 +74,5 @@ public class sendercontroller {
             webcamPanel.setMirrored(false);
         }
     }
+
 }

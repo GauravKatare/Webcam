@@ -1,5 +1,3 @@
-import sun.audio.AudioData;
-
 import java.io.Serializable;
 
 public class Myaudio implements Serializable

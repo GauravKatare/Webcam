@@ -31,12 +31,11 @@ public class sender extends Application
         OutputStream audioos = senaudio.getOutputStream();
         ObjectOutputStream audiooos=new ObjectOutputStream(audioos);
 
-
         sendercontroller controller = fxmlLoader.getController();
-        controller.webcam=getwebcam();
-        controller.webcamPanel=getWebcamPanel(webcam);
-        controller.oos=oos;
-        controller.audiooos=audiooos;
+        controller.setWebcam(getwebcam());
+        controller.setWebcamPanel(getWebcamPanel(webcam));
+        controller.setOos(oos);
+        controller.setAudiooos(audiooos);
         final SwingNode swingNode = new SwingNode();
         createAndSetSwingContent(swingNode);
         controller.anchorpane.getChildren().add(swingNode);
