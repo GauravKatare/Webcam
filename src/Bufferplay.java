@@ -8,9 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Queue;
 
-import static java.lang.Math.abs;
-import static java.lang.Thread.sleep;
-
 class Bufferplay implements Runnable
 {
 
@@ -18,12 +15,6 @@ class Bufferplay implements Runnable
     static Queue<Myvideo> videoQueue;
     static private SourceDataLine speakers;
     static private ImageView imageView;
-
-    public static void setDelta(long delta) {
-        Bufferplay.delta = delta;
-    }
-
-    private static long delta;
 
     public static void setImageView(ImageView imageView) {
         Bufferplay.imageView = imageView;
@@ -62,16 +53,11 @@ class Bufferplay implements Runnable
             Myaudio myaudio = audioQueue.peek();
             System.out.println(videoQueue.isEmpty());
             Myvideo myvideo = videoQueue.peek();
-            while(myvideo==null||myaudio==null) {
-                try {
-                    sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(getdifference(myaudio.getTimestamp(),myvideo.getTimestamp(),delta)) {
+            if(myaudio!=null) {
                 playaudio(myaudio.getAudioData(), myaudio.getTimestamp());
                 audioQueue.remove();
+            }
+            if (myvideo != null) {
                 try {
                     playimage(myvideo.getFrameData(), myvideo.getTimestamp());
                 } catch (IOException e) {
@@ -79,16 +65,7 @@ class Bufferplay implements Runnable
                 }
                 videoQueue.remove();
             }
-            else if(myaudio.getTimestamp()>myvideo.getTimestamp()) {
-                videoQueue.remove();
-            }
-            else
-                audioQueue.remove();
-        }
-    }
 
-    private boolean getdifference(long timestamp, long timestamp1,long delta) {
-        boolean b = abs(timestamp - timestamp1) < delta;
-        return b;
+        }
     }
 }
