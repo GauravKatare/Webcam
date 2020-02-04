@@ -30,9 +30,8 @@ public class AudioPlayerThread implements Runnable
             microphone = (TargetDataLine) AudioSystem.getLine(info);
             microphone.open(format);
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
             int numBytesRead;
-            int CHUNK_SIZE = 1024;
+            int CHUNK_SIZE = 10000;
             byte[] data = new byte[microphone.getBufferSize() / 5];
             microphone.start();
             long start = System.currentTimeMillis();
@@ -49,6 +48,7 @@ public class AudioPlayerThread implements Runnable
                 numBytesRead = microphone.read(data, 0, CHUNK_SIZE);
                 bytesRead += numBytesRead;
                 // write the mic data to a stream for use later
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 out.write(data, 0, numBytesRead);
                 byte[] Audiodata = out.toByteArray();
                 Myaudio myaudio=new Myaudio(Audiodata,System.currentTimeMillis()-start);
