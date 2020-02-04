@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+import static java.lang.Thread.sleep;
+
 public class Videosender implements Runnable,WebcamImageTransformer
 {
     private  WebcamPanel webcamPanel;
@@ -54,7 +56,7 @@ public class Videosender implements Runnable,WebcamImageTransformer
             IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
             IVideoPicture frame = converter.toPicture(image, (System.currentTimeMillis() - start) * 1000);
             frame.setKeyFrame(i == 0);
-            frame.setQuality(100);
+            frame.setQuality(50);
             writer.encodeVideo(0, frame);
             ByteArrayOutputStream baos=new ByteArrayOutputStream();
 
@@ -73,7 +75,6 @@ public class Videosender implements Runnable,WebcamImageTransformer
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            i++;
         }
         writer.close();
         System.out.println("Video recorded to the file: " + saveFile.getAbsolutePath());

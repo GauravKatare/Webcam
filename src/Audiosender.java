@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import static java.lang.Thread.sleep;
+
 public class Audiosender implements Runnable
 {
     private ObjectOutputStream audiooos;
@@ -56,6 +58,12 @@ public class Audiosender implements Runnable
                     audiooos.writeObject(myaudio);
                     audiooos.flush();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    sleep(2);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 // write mic data to stream for immediate playback

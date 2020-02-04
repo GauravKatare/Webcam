@@ -54,6 +54,7 @@ public class receiver extends Application
         Bufferplay.setSpeakers(speakers);
         Bufferplay.videoQueue=videoQueue;
         Bufferplay.audioQueue=audioQueue;
+        Bufferplay.setDelta(100);
 
         primaryStage.setTitle("Myskype");
         primaryStage.setScene(new Scene(pane, 800, 800));
